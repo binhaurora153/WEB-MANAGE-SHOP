@@ -1,0 +1,109 @@
+﻿@model ProductSearchResult
+@{
+    Layout = null;
+}
+
+<div>
+    <p style="margin: 10px 0 10px 0;">
+        Có<strong> @Model.RowCount</strong> sản phẩm trong
+        Có <strong>@Model.PageCount</strong> trang.
+    </p>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr class="bg-primary">
+                    <th style="width:80px">Ảnh</th>
+                    <th>Tên mặt hàng</th>
+                    <th>Đơn vị tính</th>
+                    <th>Giá</th>
+                    <th style="width:80px"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Data.Count() == 0)
+                {
+                    <tr>
+                        <td colspan="5" class="text-center">Không tìm thấy mặt hàng nào</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var product in Model.Data)
+                    {
+                        <tr>
+                            <td>
+                                @* <img class="img-responsive"
+                                     src="@(string.IsNullOrWhiteSpace(product.Photo)
+                                 ? "/shared-products/no-pic.jfif"
+                                 : $"/shared-products/{product.Photo}")"
+                                     style="width:80px; height:60px; object-fit: cover;"
+                                     alt="@product.ProductName" /> *@
+                                <img class="img-responsive"
+                                     src="~/images/products/@(string.IsNullOrWhiteSpace(product.Photo) ? "no-pic.jfif" : product.Photo)"
+                                     style="width:80px; height:60px; object-fit: cover;"
+                                     alt="@product.ProductName" /> 
+                            </td>
+                            <td>@product.ProductName</td>
+                            <td>@product.Unit</td>
+                            <td>@product.Price.ToString("N0")</td>
+                            <td class="text-right">
+                                <a href="@Url.Action("Edit", "Product", new { id = product.ProductID })" class="btn btn-xs btn-info">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                                <a href="@Url.Action("Delete", "Product", new { id = product.ProductID })" class="btn btn-xs btn-danger">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <ul class="pagination">
+            <!-- Previous Button -->
+            @if (Model.Page > 1)
+            {
+                <li class="page-item"><a class="page-link" href="javascript:;" onclick="doSearch(@(Model.Page - 1))">Previous</a></li>
+            }
+            else
+            {
+                <li class="page-item disabled"><a class="page-link" href="javascript:;">Previous</a></li>
+            }
+
+            <!-- Displaying Pages -->
+            @for (int p = 1; p <= Model.PageCount; p++)
+            {
+                // Display only surrounding pages with a range
+                if (p == 1 || p == Model.PageCount || (p >= Model.Page - 2 && p <= Model.Page + 2))
+                {
+                    if (p == Model.Page)
+                    {
+                        <li class="page-item active"><a class="page-link" href="#">@p</a></li>
+                    }
+                    else
+                    {
+                        <li class="page-item"><a class="page-link" href="javascript:;" onclick="doSearch(@p)">@p</a></li>
+                    }
+                }
+                else if (p == Model.Page - 3 || p == Model.Page + 3)
+                {
+                    <li class="page-item disabled"><a class="page-link" href="javascript:;">...</a></li>
+                }
+            }
+
+            <!-- Next Button -->
+            @if (Model.Page < Model.PageCount)
+            {
+                <li class="page-item"><a class="page-link" href="javascript:;" onclick="doSearch(@(Model.Page + 1))">Next</a></li>
+            }
+            else
+            {
+                <li class="page-item disabled"><a class="page-link" href="javascript:;">Next</a></li>
+            }
+        </ul>
+    </div>
+
+</div>

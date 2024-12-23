@@ -1,0 +1,73 @@
+﻿@model SV21T1020254.Shop.Models.OrderDetailModel
+
+
+<div class="container mt-4">
+    <h1 style=" text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: #ff6f61;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;">
+        Chi tiết đơn hàng
+    </h1>
+    <div class="card mt-3">
+        <div class="card-body">
+            <h5 class="card-title">Mã đơn hàng: @Model.Order.OrderID</h5>
+            <p class="card-text">
+                <strong>Thời gian đặt hàng:</strong> @Model.Order.OrderTime.ToString("dd/MM/yyyy HH:mm") <br />
+                <strong>Trạng thái:</strong> @Model.Order.StatusDescription <br />
+
+                @if (Model.Order.Status == Constants.ORDER_SHIPPING)
+                {
+                    <strong>Người giao hàng:</strong> @Model.Order.ShipperName <br />
+                }
+                else if (Model.Order.Status == Constants.ORDER_FINISHED)
+                {
+                    <strong>Thời gian hoàn thành:</strong> @Model.Order.FinishedTime?.ToString("dd/MM/yyyy HH:mm") <br />
+                }
+
+                <strong>Địa chỉ giao hàng:</strong> @Model.Order.DeliveryAddress, @Model.Order.DeliveryProvince <br />
+            </p>
+
+          @*   <p class="card-text">
+                <strong>Thời gian đặt hàng:</strong> @Model.Order.OrderTime.ToString("dd/MM/yyyy HH:mm") <br />
+                <strong>Trạng thái:</strong> @Model.Order.StatusDescription <br />              
+                <strong>Địa chỉ giao hàng:</strong> @Model.Order.DeliveryAddress, @Model.Order.DeliveryProvince <br />
+            </p> *@
+        </div>
+    </div>
+
+    <table class="table table-bordered table-shoppingcart mt-4">
+        <thead>
+            <tr>
+                <th>Sản phẩm</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var detail in Model.Details)
+            {
+                <tr>
+                    <td style="font-weight:600">@detail.ProductName</td>
+                    <td>@detail.Quantity</td>
+                    <td>@detail.SalePrice.ToString("N0") đ</td>
+                    <td>@Math.Round(detail.Quantity * detail.SalePrice, 0).ToString("N0") đ</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-right"><strong>Tổng cộng:</strong></td>
+                <td>@Model.Details.Sum(x => x.Quantity * x.SalePrice).ToString("N0") đ</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="text-center mt-4">
+        <a href="~/Home" style="font-weight:600" class="btn btn-return">Tiếp tục mua sắm</a>
+        <a href="/Order" style="font-weight:600; background: linear-gradient(45deg, #36d1dc, #5b86e5);" class="btn btn-return">Quản lý đơn hàng</a>
+    </div>
+</div>

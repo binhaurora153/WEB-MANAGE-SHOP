@@ -1,0 +1,196 @@
+﻿@model List<BusinessCartItem>
+
+<div class="container container-shoppingcart">
+    <h2>Giỏ hàng</h2>
+    @if (!Model.Any())
+    {
+        <div style="width: 800px; margin: 20px auto;" class="alert alert-info text-center" role="alert">
+              Giỏ hàng của bạn đang trống
+          </div>
+        <div class="text-center">
+            <img src="~/images/products/empty.png" style="width: 360px; height: 300px;" />
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="~/Home" class="btn btn-return">Quay lại cửa hàng</a>
+        </div>
+       
+    }
+    else
+    {
+        <table class="table table-bordered table-shoppingcart">
+            <thead>
+                <tr>
+                    <th>Hình ảnh</th>
+                    <th style="width: 300px;">Sản phẩm</th>
+                    <th>Giá</th>
+                    <th style="width: 290px;">Số lượng</th>
+                    <th>Tổng</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+
+                            <img src="@WebConfig.IMAGE_SOURCE_HOST/images/products/@(string.IsNullOrWhiteSpace(item.Product.Photo) ? "no-pic.jfif" : item.Product.Photo)"
+                                 class="img-thumbnail img-product"
+                                 style="width: 100px; height: 100px;" /> 
+                        </td>
+                        <td>@item.Product.ProductName</td>
+                        <td>@(item.Product.Price.ToString("N0")) đ</td>
+
+
+                        <td>
+                            <form method="post" asp-action="UpdateCart" asp-controller="Product" class="d-inline form-shoppingcart">
+                                <input type="hidden" name="id" value="@item.Product.ProductID" />
+                                <input min="1" type="number" class="form-control d-inline-block" name="quantity"
+                                       value="@item.Quantity"  />
+                                <button type="submit" class="btn btn-update-quantity"><i class="fa-regular fa-pen-to-square me-1"></i> Cập nhật</button>
+                            </form>
+                        </td>
+                        <td>@((item.Product.Price * item.Quantity).ToString("N0")) đ</td>
+
+                        <td>
+                            <a href="@Url.Action("RemoveFromCart", "Product", new { id = item.Product.ProductID })"
+                               class="btn btn-danger btn-sm bt-delete-item"
+                               onclick="return confirm('Xóa sản phẩm khỏi giỏ hàng?');">
+                                <i class="fa fa-trash"></i> Xoá
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" class="text-right"><strong>Tổng cộng:</strong></td>
+                    <td colspan="2">@Model.Sum(x => x.Product.Price * x.Quantity).ToString("N0") đ</td>
+                </tr>
+            </tfoot>
+
+        </table>
+        <div class="text-right list-btn-cart">
+            <a href="javascript:void(0)" class="btn btn-accept" data-bs-toggle="modal" data-bs-target="#orderModal">
+                <i class="fa-regular fa-credit-card me-1"></i> Đặt hàng
+            </a>
+            <a href="~/Home" class="btn btn-return"><i class="fa-solid fa-arrow-rotate-left me-1"></i> Quay lại</a>
+            <a href="@Url.Action("ClearCart", "Product")"
+               class="btn btn-clear-cart"
+               onclick="return confirm('Bạn có chắc chắn muốn xóa toàn bộ giỏ hàng?');">
+               <i class="fa-solid fa-ban me-1"></i> Xóa giỏ hàng
+            </a>
+        </div>
+    }
+</div>
+
+<div id="orderModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thông tin khách hàng</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="orderForm">
+                    <div class="form-group">
+                        <label class="my-2 fw-bold" for="deliveryProvince">Tỉnh/thành:</label>
+                        <select id="deliveryProvince" name="deliveryProvince" class="form-control" required>
+                            <option value="">-- Chọn tỉnh/thành --</option>
+                            @foreach (var province in _21T1020254.BusinessLayers.CommonDataService.ListOfProvinces())
+                            {
+                                <option value="@province.ProvinceName">@province.ProvinceName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="mt-3 mb-2 fw-bold" for="deliveryAddress">Địa chỉ giao hàng:</label>
+                        <input type="text" id="deliveryAddress" name="deliveryAddress" class="form-control" required />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <!-- Nút Hủy -->
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" style="color:#441313de;outline:none" class="btn btn-update-quantity" id="confirmOrderBtn">Xác nhận đặt hàng</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* <script>
+    $(document).ready(function () {
+        $("#confirmOrderBtn").click(function () {
+            var deliveryProvince = $("#deliveryProvince").val();
+            var deliveryAddress = $("#deliveryAddress").val();
+
+            if (!deliveryProvince || !deliveryAddress) {
+                alert("Vui lòng nhập đầy đủ thông tin giao hàng!");
+                return;
+            }
+
+            $.ajax({
+                url: '/Order/Init',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    deliveryProvince: deliveryProvince,
+                    deliveryAddress: deliveryAddress
+                }),
+                success: function (orderID) {
+                    if (orderID > 0) {
+                        window.location.href = '/Order/Details/' + orderID; Chuyển tới trang chi tiết đơn hàng
+                    } else {
+                        alert("Có lỗi xảy ra. Không thể đặt hàng.");
+                    }
+                },
+                error: function () {
+                    alert("Có lỗi xảy ra. Vui lòng thử lại.");
+                }
+            });
+        });
+    });
+</script> *@
+
+<script>
+        $(document).ready(function () {
+        $("#confirmOrderBtn").click(function () {
+            var deliveryProvince = $("#deliveryProvince").val();
+            var deliveryAddress = $("#deliveryAddress").val();
+
+            if (!deliveryProvince || !deliveryAddress) {
+                alert("Vui lòng nhập đầy đủ thông tin giao hàng!");
+                return;
+            }
+
+            $.ajax({
+                url: '/Order/Init',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    deliveryProvince: deliveryProvince,
+                    deliveryAddress: deliveryAddress
+                }),
+                success: function (orderID) {
+                    if (orderID > 0) {
+                        window.location.href = '/Order/Details/' + orderID; // Chuyển tới trang chi tiết đơn hàng
+                    } else {
+                        alert("Có lỗi xảy ra. Không thể đặt hàng.");
+                    }
+                },
+                error: function (xhr) {
+                    // Kiểm tra nếu lỗi là 401 (chưa đăng nhập)
+                    if (xhr.status === 401) {
+                        window.location.href = '/Account/Login'; // Chuyển hướng về trang đăng nhập
+                    } else {
+                        alert("Có lỗi xảy ra. Vui lòng thử lại.");
+                    }
+                }
+            });
+        });
+    });
+
+</script>
+

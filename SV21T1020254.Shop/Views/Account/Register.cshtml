@@ -1,0 +1,136 @@
+﻿@model Customer
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bình Store</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css" />
+
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body style="display:flex; align-items:center; justify-content:center;">
+    <div class="login-page">
+        <div class="form">
+            <form id="registerForm" action="~/Account/Register" method="POST" onsubmit="return validateForm()">
+                <h2>Register</h2>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                            {
+                                <div class="alert alert-danger">@error.ErrorMessage</div>
+                            }
+                        }
+                    </div>
+
+                    <div class="col-6">
+                        <input type="text"
+                               name="@nameof(Model.CustomerName)"
+                               placeholder="Enter your full name"
+                               required />
+                    </div>
+                    <div class="col-6">
+                        <input type="text"
+                               name="@nameof(Model.ContactName)"
+                               placeholder="Enter your contact's name"
+                               required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <input type="email"
+                               name="@nameof(Model.Email)"
+                               placeholder="Enter your email"
+                               required />
+                       
+                    </div>
+                    <div class="col-6">
+                        <input type="text"
+                               name="@nameof(Model.Phone)"
+                               placeholder="Enter your phone number"
+                               required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <input type="password"
+                               name="password"
+                               placeholder="Enter your password"
+                               required />
+                    </div>
+
+                    <div class="col-6">
+                        <input type="text"
+                               name="@nameof(Model.Address)"
+                               placeholder="Enter your address"
+                               required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <input type="password"
+                               name="confirmPassword"
+                               placeholder="Enter your repassword"
+                               required />
+                    </div>
+                    <div class="col-6">
+                        <select id="provinceSelect" class="select-province" name="@nameof(Model.Province)">
+
+                             <option value="0">---Selected Province---</option>
+                        @foreach (var item in _21T1020254.BusinessLayers.CommonDataService.ListOfProvinces())
+                        {
+                            if (item.ProvinceName == Model.Province)
+                            {
+                                <option value="@item.ProvinceName" selected>@item.ProvinceName</option>
+                            }
+                            else
+                            {
+                                <option value="@item.ProvinceName">@item.ProvinceName</option>
+                            }
+                        }
+
+                        </select>                       
+                    </div>
+
+                </div>
+
+                <button class="btn" type="submit" >
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    Create
+                </button>
+
+                <p class="message">Already registered? <a href="/Account/Login">Sign In</a></p>
+            </form>
+            
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function validateForm() {
+            var provinceSelect = document.getElementById("provinceSelect");
+            // Kiểm tra nếu giá trị là "0" (tức là chưa chọn tỉnh)
+            if (provinceSelect.value === "0") {
+                alert("Vui lòng chọn tỉnh thành.");
+                return false; // Ngừng submit form
+            }
+            return true; // Cho phép form submit nếu mọi thứ hợp lệ
+        }
+    </script>
+   
+</body>
+</html>
+

@@ -1,0 +1,96 @@
+﻿@model ProductSearchResult
+@{
+    Layout = null;
+}
+<div style="padding:10px 50px;" class="container-main-product">
+<div>
+    <p style="margin: 10px 0 10px 0;">
+        Có <strong>@Model.RowCount</strong> sản phẩm trong
+        <strong>@Model.PageCount</strong> trang.
+    </p>
+
+    <div class="row">
+        @if (Model.Data.Count() == 0)
+        {
+            <div class="col-12 text-center">
+                <p>Không tìm thấy mặt hàng nào</p>
+            </div>
+        }
+        else
+        {
+            foreach (var product in Model.Data)
+            {
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100 shadow-sm">
+                            <div class="box-img" style="height:180px;border-bottom: 1px solid #8080802e;">
+                              
+                                 <img class="card-img-top"
+                                     src="@WebConfig.IMAGE_SOURCE_HOST/images/products/@(string.IsNullOrWhiteSpace(product.Photo) ? "no-pic.jfif" : product.Photo)"
+                                     style="height: 180px; object-fit: contain;"
+                                     alt="@product.ProductName" /> 
+                        </div>
+                       
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-truncate">@product.ProductName</h5>
+                            <p class="card-text">@product.Price.ToString("N0") đ</p>
+                        </div>
+                            <div class="card-footer d-flex justify-content-around">
+                                <a href="@Url.Action("Details", "Product", new { id = product.ProductID })" class="btn-custom btn-details fw-bold">
+                                    <i class="fa-solid fa-eye"></i> Xem chi tiết
+                                </a>
+                                <a href="@Url.Action("AddToCart", "Product", new { id = product.ProductID })" class="btn-custom btn-buy fw-bold">
+                                    <i class="fa-solid fa-cart-shopping"></i> Mua
+                                </a>
+                            </div>
+
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+    <div class="text-center mt-4">
+        <ul class="pagination justify-content-center">
+            <!-- Previous Button -->
+            @if (Model.Page > 1)
+            {
+                <li class="page-item"><a class="page-link" href="javascript:;" onclick="doSearch(@(Model.Page - 1))">Previous</a></li>
+            }
+            else
+            {
+                <li class="page-item disabled"><a class="page-link" href="javascript:;">Previous</a></li>
+            }
+
+            <!-- Displaying Pages -->
+            @for (int p = 1; p <= Model.PageCount; p++)
+            {
+                if (p == 1 || p == Model.PageCount || (p >= Model.Page - 2 && p <= Model.Page + 2))
+                {
+                    if (p == Model.Page)
+                    {
+                        <li class="page-item active"><a class="page-link" href="#">@p</a></li>
+                    }
+                    else
+                    {
+                        <li class="page-item"><a class="page-link" href="javascript:;" onclick="doSearch(@p)">@p</a></li>
+                    }
+                }
+                else if (p == Model.Page - 3 || p == Model.Page + 3)
+                {
+                    <li class="page-item disabled"><a class="page-link" href="javascript:;">...</a></li>
+                }
+            }
+
+            <!-- Next Button -->
+            @if (Model.Page < Model.PageCount)
+            {
+                <li class="page-item"><a class="page-link" href="javascript:;" onclick="doSearch(@(Model.Page + 1))">Next</a></li>
+            }
+            else
+            {
+                <li class="page-item disabled"><a class="page-link" href="javascript:;">Next</a></li>
+            }
+        </ul>
+    </div>
+</div>
+</div>

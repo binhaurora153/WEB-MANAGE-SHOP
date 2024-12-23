@@ -1,0 +1,124 @@
+﻿/* Tổng quan container */
+.product-container {
+    max-width: 1380px;
+    margin: 30px auto;
+    background: linear-gradient(to bottom right, #ffffff, #f3f4f7);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
+    padding: 25px;
+}
+
+
+
+/* Hàng chứa nội dung */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* Hình ảnh sản phẩm */
+.product-image {
+    text-align: center;
+}
+
+    .product-image img {
+        max-width: 100%;
+        border-radius: 8px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .product-image img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+/* Thông tin sản phẩm */
+.product-info {
+    padding: 20px;
+}
+
+.product-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.product-info p {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    color: #555;
+    margin: 8px 0;
+}
+.product-info strong {
+    color: #000;
+}
+
+/* Các nút hành động */
+.product-actions {
+    display: flex;
+    gap: 15px;
+}
+
+    .product-actions .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: bold;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+.btn-addCart {
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 10px rgba(255, 126, 95, 0.3);
+}
+
+    .btn-addCart i {
+        margin-right: 8px;
+        font-size: 18px;
+    }
+
+    .btn-addCart:hover {
+        background: linear-gradient(to right, #feb47b, #ff7e5f);
+        box-shadow: 0 6px 15px rgba(255, 126, 95, 0.5);
+        transform: translateY(-3px);
+    }
+
+.product-actions .btn-secondary {
+    background: #ddd;
+    color: #333;
+    border: none;
+}
+    .product-actions .btn-secondary:hover {
+        background: #bbb;
+        color: #000;
+        transform: translateY(-3px);
+    }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column;
+    }
+
+    .product-info {
+        text-align: center;
+    }
+
+    .product-actions {
+        justify-content: center;
+    }
+}
+
+

@@ -1,0 +1,270 @@
+﻿@model Product
+<div class="product-container">
+    <h1 style="text-align: center; font-size: 2.5rem; margin-bottom: 40px; color: #ff6f61; text-transform: uppercase; letter-spacing: 2px; font-weight: 600;">
+        Chi tiết sản phẩm
+    </h1>
+
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-5 product-image">
+            <!-- Bootstrap 5 Carousel for Image Slider -->
+            @if (ProductDataService.ListPhotos(Model.ProductID).Any() || !string.IsNullOrWhiteSpace(Model.Photo))
+            {
+                    <div id="productImageCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <!-- Hiển thị ảnh chính của sản phẩm -->
+                            <div class="carousel-item active">
+                                <img src="@WebConfig.IMAGE_SOURCE_HOST/images/products/@(string.IsNullOrWhiteSpace(Model.Photo) ? "no-pic.jfif" : Model.Photo)"
+                                     alt="@Model.ProductName"
+                                     class="d-block w-100"
+                                     style="height: 300px; object-fit: contain;">
+                            <div class="image-description">
+                                    <p>@Model.ProductDescription</p>
+                                </div>
+                            </div>
+                            <!-- Hiển thị các ảnh khác trong thư viện -->
+                        @foreach (var photo in ProductDataService.ListPhotos(Model.ProductID))
+                        {
+                                    <div class="carousel-item">
+                                        <img src="@WebConfig.IMAGE_SOURCE_HOST/images/@(string.IsNullOrWhiteSpace(photo.Photo) ? "products/no-pic.jfif" : $"products/{photo.Photo}")"
+                                             alt="@photo.Description"
+                                             class="d-block w-100"
+                                                     style="height: 300px; object-fit: contain;">
+                                <div class="image-description">
+                                            <p>@photo.Description</p>
+                                        </div>
+                                    </div>
+                        }
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#productImageCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#productImageCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+            }
+            else
+            {
+                    <img style="height:300px;width:300px" src="@WebConfig.IMAGE_SOURCE_HOST/images/products/no-pic.jfif" alt="No Image Available">
+            }
+        </div>
+        <div class="col-md-6 product-info">
+            <h2 class="product-title">@Model.ProductName</h2>
+            <p><strong>Giá:</strong> @Model.Price.ToString("N0") đ</p>
+           
+            <p><strong>Loại hàng:</strong> @CommonDataService.GetCategoryName(Model.CategoryID)</p>
+            <p><strong>Nhà cung cấp:</strong> @CommonDataService.GetSupplierName(Model.SupplierID)</p>
+            <p><strong>Đơn vị tính:</strong> @Model.Unit</p>
+            <div class="product-actions mt-4">
+                <a href="@Url.Action("AddToCart", "Product", new { id = Model.ProductID })"
+                   class="btn btn-addCart">
+                    <i class="fa fa-cart-plus"></i> Thêm vào giỏ hàng
+                </a>
+                <a href="~/Home" class="btn btn-return">Quay lại</a>
+            </div>
+        </div>
+    </div>
+
+
+     <div class="box box-info mt-5">
+            <div class="box-header with-border">
+                <h3 class="box-title">Thuộc tính của mặt hàng</h3>
+
+            </div>
+
+            <div class="box-body">
+            @if (!ProductDataService.ListAttributes(Model.ProductID).Any())
+            {
+                        <div class="alert alert-info" role="alert">
+                           Thuộc tính của mặt hàng hiện đang trống
+                        </div>
+            }
+            else
+            {
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr class="bg-gray">
+                                <th class="text-center">Tên thuộc tính</th>
+                                <th class="text-center">Giá trị thuộc tính</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var productAttribute in ProductDataService.ListAttributes(Model.ProductID))
+                        {
+                                    <tr>
+                                        <td class="align-middle text-center">@productAttribute.AttributeName</td>
+                                        <td class="align-middle text-center">@productAttribute.AttributeValue</td>
+
+
+                                    </tr>
+                        }
+                        </tbody>
+                    </table>
+            }
+            </div>
+</div>
+
+
+@*  @model Product
+<div class="product-container">
+
+    <h1 style=" text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: #ff6f61;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;">
+        Chi tiết sản phẩm
+    </h1>
+   
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-5 product-image">
+           
+            <img style="height:300px;width:300px" src="@WebConfig.IMAGE_SOURCE_HOST/images/products/@(string.IsNullOrWhiteSpace(Model.Photo) ? "no-pic.jfif" : Model.Photo)"
+                 alt="@Model.ProductName"> 
+        </div>
+        <div class="col-md-6 product-info">
+            <h2 class="product-title">@Model.ProductName</h2>
+            <p><strong>Giá:</strong> @Model.Price.ToString("N0") đ</p>
+            <p><strong>Mô tả:</strong> @Model.ProductDescription</p>
+            <p><strong>Loại hàng:</strong> @CommonDataService.GetCategoryName(Model.CategoryID)</p>
+            <p><strong>Nhà cung cấp:</strong> @CommonDataService.GetSupplierName(Model.SupplierID)</p>
+            <p><strong>Đơn vị tính:</strong> @Model.Unit</p>
+            <div class="product-actions mt-4">
+                <a href="@Url.Action("AddToCart", "Product", new { id = Model.ProductID })"
+                   class="btn btn-addCart">
+                    <i class="fa fa-cart-plus"></i> Thêm vào giỏ hàng
+                </a>
+                <a href="javascript:history.back()" class="btn btn-return">Quay lại</a>
+            </div>
+        </div>
+    </div>
+
+
+
+    @if (Model.ProductID != 0)
+    {
+        <div class="box box-info mt-4">
+            <div class="box-header with-border">
+                <h3 class="box-title">Thư viện ảnh</h3>
+               
+            </div>
+            <div class="box-body">
+                @if (!ProductDataService.ListPhotos(Model.ProductID).Any())
+                {
+                    <div class="alert alert-info" role="alert">
+                        Thư viện ảnh hiện đang trống
+                    </div>
+                }
+                else
+                {
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr class="bg-gray">
+                            <th class="text-center">Ảnh</th>
+                            <th class="text-center">Mô tả / tiêu đề</th>
+                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var photo in ProductDataService.ListPhotos(Model.ProductID))
+                        {
+                            <tr>
+                                 <td class="text-center" style="vertical-align:middle">
+                                    <img src="@WebConfig.IMAGE_SOURCE_HOST/images/@(string.IsNullOrWhiteSpace(photo.Photo) ? "products/no-pic.jfif" : $"products/{photo.Photo}")"
+                                         alt="@photo.Photo"
+                                         style="width:100px;height:100px" />
+                                </td> 
+                                   
+
+                                <td style="vertical-align:middle; text-align:center">
+
+                                    @photo.Description
+                                </td>
+                                               
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                }
+            </div>
+
+        </div>
+
+        <div class="box box-info">
+            <div class="box-header with-border">
+                <h3 class="box-title">Thuộc tính của mặt hàng</h3>
+               
+            </div>
+
+            <div class="box-body">
+                @if (!ProductDataService.ListAttributes(Model.ProductID).Any())
+                {
+                    <div class="alert alert-info" role="alert">
+                       Thuộc tính của mặt hàng hiện đang trống
+                    </div>
+                }
+                else
+                {
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr class="bg-gray">
+                            <th class="text-center">Tên thuộc tính</th>
+                            <th class="text-center">Giá trị thuộc tính</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var productAttribute in ProductDataService.ListAttributes(Model.ProductID))
+                        {
+                            <tr>
+                                <td class="align-middle text-center">@productAttribute.AttributeName</td>
+                                <td class="align-middle text-center">@productAttribute.AttributeValue</td>
+                               
+                              
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+
+ *@
+    <!-- CSS tùy chỉnh -->
+    <style>
+        /* Thay đổi màu sắc của mũi tên điều hướng thành đen */
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            background-color: black; /* Đặt màu nền cho biểu tượng */
+            border-radius: 50%; /* Làm mũi tên tròn nếu cần */
+        }
+
+        /* Tùy chỉnh kích thước (nếu cần) */
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            width: 30px;
+            height: 30px;
+        }
+        /* Đặt mô tả (description) dưới chân ảnh */
+        .image-description {
+            text-align: center; /* Canh giữa mô tả */
+            margin-top: 10px; /* Khoảng cách giữa ảnh và mô tả */
+            font-size: 15px; /* Kích thước chữ */
+            color: #555; /* Màu chữ xám nhạt */
+        }
+
+        /* Đảm bảo carousel caption mặc định không hiển thị trong ảnh */
+        .carousel-caption {
+            display: none; /* Ẩn caption mặc định của Bootstrap */
+        }
+    </style>

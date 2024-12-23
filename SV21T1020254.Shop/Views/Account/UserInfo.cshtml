@@ -1,0 +1,68 @@
+﻿@model Customer
+
+
+<div class="container container-userinfo" style="margin-bottom: 30px !important;">
+    <h1 style="text-align:center;color:brown;padding: 20px 0;">Thông tin khách hàng</h1>
+
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success">@ViewBag.Message</div>
+}
+
+    <form class="customer-info-form" action="~/Account/UpdateUserInfo" method="post">
+     <input type="hidden" name="@nameof(Model.CustomerID)" value="@Model.CustomerID"/>
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <input type="email" class="form-control" id="Email" name="@nameof(Model.Email)" value="@Model.Email" readonly />
+    </div>
+    <div class="form-group">
+        <label for="CustomerName">Tên Khách Hàng</label>
+        <input type="text" class="form-control" id="CustomerName" name="@nameof(Model.CustomerName)" value="@Model.CustomerName" required />
+    </div>
+
+    <div class="form-group">
+        <label for="ContactName">Tên Liên Hệ</label>
+        <input type="text" class="form-control" id="ContactName" name="@nameof(Model.ContactName)" value="@Model.ContactName" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Province">Tỉnh/Thành Phố</label>
+        <select class="select2 form-control-selected" id="Province" name="@nameof(Model.Province)">
+            @foreach (var item in _21T1020254.BusinessLayers.CommonDataService.ListOfProvinces())
+            {
+                if (item.ProvinceName == Model.Province)
+                {
+                    <option value="@item.ProvinceName" selected>@item.ProvinceName</option>
+                }
+                else
+                {
+                    <option value="@item.ProvinceName">@item.ProvinceName</option>
+                }
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="Address">Địa Chỉ</label>
+        <input type="text" class="form-control" id="Address" name="@nameof(Model.Address)" value="@Model.Address" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Phone">Số Điện Thoại</label>
+        <input type="text" class="form-control" id="Phone" name="@nameof(Model.Phone)" value="@Model.Phone" required />
+    </div>
+
+   
+
+
+    <div class="form-group">
+        <label for="IsLocked">Trạng thái tài khoản</label>
+        <p class="form-control-static form-control">
+            @(Model.IsLocked ? "Tài khoản đang bị khóa" : "Tài khoản đang hoạt động")
+        </p>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Cập Nhật</button>
+</form>
+</div>

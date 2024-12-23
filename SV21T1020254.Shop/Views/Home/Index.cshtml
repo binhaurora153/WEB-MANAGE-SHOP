@@ -1,0 +1,172 @@
+﻿@model ProductSearchInput
+
+<div class="main-slide-background">
+    <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="4" aria-label="Slide 5"></button>
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="5" aria-label="Slide 6"></button>
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="6" aria-label="Slide 7"></button>
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="7" aria-label="Slide 8"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active" data-bs-interval="3000">
+                <img src="~/images/products/banner1.webp" alt="...">
+                <div class="carousel-caption d-none d-md-block"></div>
+            </div>
+            <div class="carousel-item" data-bs-interval="3000">
+                <img src="~/images/products/banner2.jpg" alt="...">
+                <div class="carousel-caption d-none d-md-block"></div>
+            </div>
+            <div class="carousel-item" data-bs-interval="3000">
+                <img src="~/images/products/banner3.webp" alt="...">
+                <div class="carousel-caption d-none d-md-block"></div>
+            </div>
+            <div class="carousel-item" data-bs-interval="3000">
+                <img src="~/images/products/banner4.jpg" alt="...">
+                <div class="carousel-caption d-none d-md-block"></div>
+            </div>
+            <div class="carousel-item" >
+                <img src="~/images/products/banner5.png" alt="...">
+                <div class="carousel-caption d-none d-md-block"></div>
+            </div>
+            <div class="carousel-item" >
+                <img src="~/images/products/banner6.jpg" alt="...">
+                <div class="carousel-caption d-none d-md-block"></div>
+            </div>
+            <div class="carousel-item" >
+                <img src="~/images/products/banner7.jpg" alt="...">
+                <div class="carousel-caption d-none d-md-block"></div>
+            </div>
+            <div class="carousel-item">
+                <img src="~/images/products/banner8.jpg" alt="...">
+                <div class="carousel-caption d-none d-md-block"></div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+
+<div style="padding:30px 100px;" class="container-fluid">
+<div class="box box-primary">
+    <div class="box-body">
+        <!-- Form đầu vào tìm kiếm -->
+        <form action="~/Home/Search" method="get" id="frmSearchInput">
+
+            <input type="hidden" name="@nameof(Model.PageSize)" value="@Model.PageSize" />
+
+            <div class="row">
+                <div class="col-sm-2">
+                    <label>Loại hàng:</label>
+                    <select class="form-select" name="@nameof(Model.CategoryID)">
+                        <option value="">-- Chọn loại hàng --</option>
+                        @foreach (var item in CommonDataService.ListOfCategories())
+                        {
+                            if (item.CategoryID == Model.CategoryID)
+                            {
+                                <option selected value="@item.CategoryID">@item.CategoryName</option>
+                            }
+                            else
+                            {
+                                <option value="@item.CategoryID">@item.CategoryName</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3 ">
+                    <label>Nhà cung cấp:</label>
+                    <select class="form-select" name="@nameof(Model.SupplierID)">
+                        <option value="">-- Chọn nhà cung cấp --</option>
+                        @foreach (var item in CommonDataService.ListOfSuppliers())
+                        {
+                            if (item.SupplierID == Model.SupplierID)
+                            {
+                                <option selected value="@item.SupplierID">@item.SupplierName</option>
+                            }
+                            else
+                            {
+                                <option value="@item.SupplierID">@item.SupplierName</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label>Giá từ:</label>
+                    <input type="text"
+                           class="form-control number-separator text-left tooltip-price"
+                           name="@nameof(Model.MinPrice)"
+                           value="@Model.MinPrice"
+                           autocomplete="off"
+                           min="0" />
+                </div>
+                <div class="col-sm-2">
+                    <label>đến:</label>
+                    <input type="text"
+                           class="form-control number-separator text-left tooltip-price"
+                           name="@nameof(Model.MaxPrice)"
+                           value="@Model.MaxPrice"
+                           autocomplete="off"
+                           min="0" />
+                </div>
+                <div class="col-sm-3">
+                    <label>Tên mặt hàng cần tìm:</label>
+                    <div class="input-group">
+                        <input name="@nameof(Model.SearchValue)"
+                               value="@Model.SearchValue"
+                               type="text"
+                               class="form-control"
+                               placeholder="Nhập mặt hàng hàng cần tìm"
+                              />
+                        <div class="input-group-append">
+                            <button class="btn btn-info" type="submit">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div id="searchResult"></div>
+    </div>
+</div>
+</div>
+@section scripts {
+    <script>
+        function doSearch(page) {
+            var searchCondition = $("#frmSearchInput").serializeArray();
+            searchCondition.push({ name: "page", value: page });
+
+            var action = $("#frmSearchInput").prop("action");
+            var method = $("#frmSearchInput").prop("method");
+
+            $.ajax({
+                url: action,
+                type: method,
+                data: searchCondition,
+                success: function (data) {
+                    $("#searchResult").html(data);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            doSearch(@Model.Page);
+            $("#frmSearchInput").submit(function (e) {
+                e.preventDefault();
+                doSearch(1);
+            });
+        });
+    </script>
+}

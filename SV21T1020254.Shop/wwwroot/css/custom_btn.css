@@ -1,0 +1,163 @@
+﻿/* Styles for the custom buttons */
+.btn-custom {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: 600 !important;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Gradient backgrounds */
+.btn-details {
+    background: linear-gradient(45deg, #6a11cb, #2575fc);
+}
+
+.btn-buy {
+    background: linear-gradient(45deg, #f2994a, #f2c94c);
+}
+
+/* Hover effect with scale and brighter gradient */
+.btn-custom:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+
+}
+
+.btn-details:hover {
+    background: linear-gradient(45deg, #7d3cff, #3498ff);
+    color:blanchedalmond;
+}
+
+.btn-buy:hover {
+    background: linear-gradient(45deg, #ffad47, #ffd947);
+}
+
+/* Add icon spacing */
+.btn-custom i {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+/* Active state */
+.btn-custom:active {
+    transform: scale(1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Hover effect for the product card */
+.card {
+    transition: all 0.3s ease;
+    transform-origin: center;
+    overflow: hidden; /* Prevent content spilling */
+}
+
+    .card:hover {
+        transform: scale(1.05); /* Slightly enlarge the card */
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Add a shadow effect */
+    }
+
+    /* Zoom effect on the image */
+    .card .box-img img {
+        transition: all 0.3s ease;
+    }
+
+    .card:hover .box-img img {
+        transform: scale(1.1); /* Slightly zoom the image */
+    }
+
+/* Highlight the footer buttons */
+.card-footer a {
+    transition: all 0.3s ease;
+}
+
+.card:hover .btn-details {
+    background: linear-gradient(45deg, #3498ff, #7d3cff);
+}
+
+.card:hover .btn-buy {
+    background: linear-gradient(45deg, #ffd947, #ffad47);
+}
+
+/* Styling cho toàn bộ box */
+.box {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: linear-gradient(to bottom, #ffffff, #f9f9f9);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.box-body {
+    padding: 15px;
+}
+
+/* Tiêu đề label */
+.box label {
+    font-weight: bold;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+/* Select dropdown */
+.form-select {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+    .form-select:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+    }
+
+/* Input fields */
+.form-control {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+    .form-control:focus {
+        border-color: #2ecc71;
+        box-shadow: 0 0 5px rgba(46, 204, 113, 0.5);
+    }
+
+/* Tooltip styling for prices */
+.tooltip-price {
+    font-family: "Roboto", sans-serif;
+    font-size: 0.9rem;
+}
+
+/* Input group append (search button) */
+.input-group-append .btn {
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    border: none;
+    border-radius: 0 5px 5px 0;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+    .input-group-append .btn:hover {
+        background: linear-gradient(to right, #2575fc, #6a11cb);
+        transform: scale(1.05);
+    }
+
+    .input-group-append .btn i {
+        font-size: 1rem;
+    }
+
+/* Row layout and spacing */
+.row > div {
+    margin-bottom: 15px;
+}
